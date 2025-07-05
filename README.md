@@ -22,7 +22,21 @@ npm create cloudflare@latest -- --template=cloudflare/templates/containers-templ
 
 First, run:
 
+
+````
+
+wrangler 4.23.0
+
+npm i wrangler@latest -g
+
+Write:
+Cloudflare Workers, Cloudflare Workers KV Storage, Cloudflare Workers Routes, Cloudflare Workers Scripts, D1, Cloudflare Pages, Account SSL and Certificates, Cloudflare Workers AI, Cloudflare Queues, Pipelines, Cloudflare Secrets Store, Workers Containers, and Cloudchamber
+````
+
 ```bash
+
+rm package-lock.json 
+
 npm install
 # or
 yarn install
