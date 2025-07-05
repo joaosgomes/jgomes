@@ -13,6 +13,12 @@
       "image": "./Dockerfile",
       "max_instances": 10,
       "name": "jgomes"
+    },
+    {
+      "class_name": "MyContainerNode",
+      "image": "./Dockerfile.node",
+      "max_instances": 10,
+      "name": "jgomes-node"
     }
   ],
   "durable_objects": {
@@ -20,12 +26,20 @@
       {
         "class_name": "MyContainer",
         "name": "MY_CONTAINER"
+      },
+      {
+        "class_name": "MyContainerNode",
+        "name": "MY_CONTAINER_NODE"
       }
     ]
   },
   "migrations": [
     {
       "new_sqlite_classes": ["MyContainer"],
+      "tag": "v1"
+    },
+    {
+      "new_sqlite_classes": ["MyContainerNode"],
       "tag": "v1"
     }
   ]

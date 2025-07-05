@@ -25,9 +25,34 @@ export class MyContainer extends Container {
   }
 }
 
+export class MyContainerNode extends Container {
+  // Port the container listens on (default: 8080)
+  defaultPort = 8081;
+  // Time before container sleeps due to inactivity (default: 30s)
+  sleepAfter = "2m";
+
+
+  // Optional lifecycle hooks
+  override onStart() {
+    console.log("Container successfully started");
+  }
+
+  override onStop() {
+    console.log("Container successfully shut down");
+  }
+
+  override onError(error: unknown) {
+    console.log("Container error:", error);
+  }
+}
+
 // Create Hono app with proper typing for Cloudflare Workers
 const app = new Hono<{
-  Bindings: { MY_CONTAINER: DurableObjectNamespace<MyContainer> };
+  //Bindings: { MY_CONTAINER: DurableObjectNamespace<MyContainer> };
+  Bindings: {
+    MY_CONTAINER: DurableObjectNamespace<MyContainer>;
+    MY_CONTAINER_NODE: DurableObjectNamespace<MyContainerNode>;
+  };
 }>();
 
 // Home route with available endpoints
@@ -35,6 +60,7 @@ app.get("/", (c) => {
   return c.text(
     "Available endpoints:\n" +
       "GET /container/<ID> - Start a container for each ID with a 2m timeout\n" +
+      "GET /container-node/<ID> - Start a node js server 8081 container for each ID with a 2m timeout\n" +
       "GET /lb - Load balance requests over multiple containers\n" +
       "GET /error - Start a container that errors (demonstrates error handling)\n" +
       "GET /singleton - Get a single specific container instance",
@@ -46,6 +72,14 @@ app.get("/container/:id", async (c) => {
   const id = c.req.param("id");
   const containerId = c.env.MY_CONTAINER.idFromName(`/container/${id}`);
   const container = c.env.MY_CONTAINER.get(containerId);
+  return await container.fetch(c.req.raw);
+});
+
+
+app.get("/container-node/:id", async (c) => {
+  const id = c.req.param("id");
+  const containerId = c.env.MY_CONTAINER_NODE.idFromName(`/container/${id}`);
+  const container = c.env.MY_CONTAINER_NODE.get(containerId);
   return await container.fetch(c.req.raw);
 });
 

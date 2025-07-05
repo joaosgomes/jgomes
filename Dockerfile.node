@@ -1,0 +1,14 @@
+# Use the official Node.js LTS image
+FROM node:18
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy the container_src_node folder contents into /app
+COPY container_src_node /app
+
+# Expose port 8081
+EXPOSE 8081
+
+# Run main.js
+CMD ["node", "main.js"]
